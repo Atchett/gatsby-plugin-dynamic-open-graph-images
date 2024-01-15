@@ -11,13 +11,13 @@ exports.generateOgImages = async (config) => {
   const servingUrl = await getServingUrl(rootDir);
   const componentPaths = await getComponentPaths(rootDir);
 
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch({ headless: "new" });
   const page = await browser.newPage();
 
   for (const path of componentPaths) {
     await page.setViewport(size);
     await page.goto(`${servingUrl}/${rootDir}/${path}`, {
-      waitUntil: "networkidle2",
+      waitUntil: "domcontentloaded",
     });
     await page.screenshot({
       path: `${rootDir}/${path}.png`,
